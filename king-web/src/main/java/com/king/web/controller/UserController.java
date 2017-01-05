@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -30,14 +31,14 @@ public class UserController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<UserRegisterResponse> register(@RequestBody UserRegisterRequest request) {
+    public ResponseEntity<UserRegisterResponse> register(@RequestBody @Valid UserRegisterRequest request) {
         UserRegisterResponse response = userService.register(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest request) {
         UserLoginResponse response = userService.login(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
