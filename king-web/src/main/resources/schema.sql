@@ -1,6 +1,6 @@
 -- 建表sql
 
-create table king_user
+create table user
 (
 	id             varchar(50)  primary key,
 	username       varchar(50),

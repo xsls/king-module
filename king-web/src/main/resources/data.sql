@@ -1,1 +1,1 @@
-insert into king_user(id, username, password, created_date) values ('1', 'zhangsan', '123456789', now());
+insert into user(id, username, password, created_date) values ('1', 'zhangsan', '123456789', now());
