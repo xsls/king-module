@@ -20,3 +20,5 @@ create table user
 	password       varchar(50),
 	created_date   datetime
 );
+
+show columns from user;
