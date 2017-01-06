@@ -20,6 +20,7 @@
         <module>king-business</module>
         <module>king-web</module>
         <module>king-common</module>
+        <module>king-auth</module>
     </modules>
 
     <properties>
