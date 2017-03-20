@@ -6,17 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 登录拦截器
+ * 登录验证拦截器
+ * 2016.12.26
  */
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
-        boolean flag = AuthUtils.validate(request);
-        if (flag) {
-            AuthUtils.refreshToken();
-        }
-        return flag;
+        AuthUtils.validate(request);
+        return true;
     }
 
 

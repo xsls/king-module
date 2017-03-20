@@ -1,10 +1,23 @@
 package com.king.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 登陆认证工具类
+ * 2016.12.26
+ */
 public class AuthUtils {
+
+    @Autowired
+    private static CookieUtils cookieUtils;
+
+    @Autowired
+    private static CookieSettings cookieSettings;
+
 
     // token cookie的名字
     private static final String AUTH_TOKEN_NAME = "king-token";
@@ -18,9 +31,9 @@ public class AuthUtils {
      * 用于登陆成功时
      * @param response
      */
-    public static void create(HttpServletResponse response) {
+    public void create(HttpServletResponse response) {
         String cookieValue = "";
-        Cookie cookie = CookieUtils.createCookie(AUTH_TOKEN_NAME, cookieValue);
+        Cookie cookie = cookieUtils.createCookie(AUTH_TOKEN_NAME, cookieValue);
         response.addCookie(cookie);
     }
 
@@ -32,17 +45,21 @@ public class AuthUtils {
      * @return
      */
     public static boolean validate(HttpServletRequest request) {
-        Cookie cookie = CookieUtils.getCookie(request, AUTH_TOKEN_NAME);
+        Cookie cookie = cookieUtils.getCookie(request, cookieSettings.getAuthTokenName());
         if (cookie == null) {
-            return false;
+            throw new UnauthorizedException("登陆认证失败!");
         }
         String cookieValue = cookie.getValue();
         // 对cookieValue进行解密
+        String plainText = "";
         AuthToken token = toAuthToken(cookieValue);
-        if (token.getTimestamp() + SESSION_TIMEOUT < System.currentTimeMillis()) {
-            return false;
+        boolean isSessionEffective = token.getTimestamp() + cookieSettings.getTimeout() < System.currentTimeMillis();
+        if (isSessionEffective) {
+            // 刷新会话
+            return true;
+        } else {
+            throw new UnauthorizedException("会话已过期!");
         }
-        return true;
     }
 
 
@@ -50,7 +67,11 @@ public class AuthUtils {
      * 刷新token
      * 用于正常访问API之后
      */
-    public static void refreshToken() {
+    public static void refreshToken(AuthToken token) {
+        token.setTimestamp(System.currentTimeMillis());
+        // 对新的token进行加密
+        String cipherText = "";
+        // 覆盖已有的token
 
     }
 

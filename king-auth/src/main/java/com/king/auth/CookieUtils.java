@@ -1,20 +1,27 @@
 package com.king.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * cookie工具类
+ * 缺点：utils类中的方法通常为static的
+ * 2016.12.26
  */
+@Component
 public class CookieUtils {
+
+    @Autowired
+    private CookieSettings cookieSettings;
+
 
     /**
      * 根据cookie名，从request中获取对应的cookie
-     * @param request
-     * @param cookieName
-     * @return
      */
-    public static Cookie getCookie(HttpServletRequest request, String cookieName) {
+    public Cookie getCookie(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(cookieName)) {
@@ -27,23 +34,25 @@ public class CookieUtils {
 
     /**
      * 创建cookie
-     * @param cookieName
-     * @param cookieValue
-     * @return
      */
-    public static Cookie createCookie(String cookieName, String cookieValue) {
+    public Cookie createCookie(String cookieName, String cookieValue) {
         Cookie cookie = new Cookie(cookieName, cookieValue);
+        cookie.setDomain(cookieSettings.getDomain());
+        cookie.setMaxAge(cookieSettings.getTimeout());
         cookie.setHttpOnly(true);
         return cookie;
     }
 
 
     /**
-     * 删除cookie
-     * @param cookieName
+     * 据cookie名，删除cookie
      */
-    public void deleteCookie(String cookieName) {
-
+    public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
+        Cookie cookie = getCookie(request, cookieName);
+        if (cookie != null) {
+            cookie.setMaxAge(-1);
+            response.addCookie(cookie);
+        }
     }
 
 }
