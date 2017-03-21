@@ -23,6 +23,11 @@
             <artifactId>king-business</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>king-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package com.king.web;
+package com.king;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,9 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * 2016.12.26
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "com.king")
-@EnableJpaRepositories(basePackages = "com.king.data.repository")
-@EntityScan("com.king.data.model")
+//@ComponentScan(basePackages = "com.king")
+//@EnableJpaRepositories(basePackages = "com.king.data.repository")
+//@EntityScan("com.king.data.model")
 public class Application {
 
     public static void main(String[] args) {
