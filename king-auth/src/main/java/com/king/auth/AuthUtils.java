@@ -1,5 +1,6 @@
 package com.king.auth;
 
+import com.king.common.utils.AES;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;

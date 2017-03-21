@@ -1,4 +1,4 @@
-package com.king.auth;
+package com.king.common.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
