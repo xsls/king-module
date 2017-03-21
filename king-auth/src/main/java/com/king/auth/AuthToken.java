@@ -1,5 +1,9 @@
 package com.king.auth;
 
+/**
+ * AuthToken
+ * 2016.12.26
+ */
 public class AuthToken {
 
     // 用户id
