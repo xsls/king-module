@@ -2,7 +2,6 @@ package com.king.auth;
 
 import com.king.common.utils.AES;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,43 +19,41 @@ public class AuthUtils {
     private static CookieSettings cookieSettings;
 
 
-    // token cookie的名字
-    private static final String AUTH_TOKEN_NAME = "king-token";
-
-    // 会话有效期
-    private static final Integer SESSION_TIMEOUT = 30 * 1000 * 1000;
-
-
     /**
      * 添加cookie
      * 用于登陆成功时
-     * @param response
      */
-    public void create(HttpServletResponse response) {
-        String cookieValue = "";
-        Cookie cookie = cookieUtils.createCookie(AUTH_TOKEN_NAME, cookieValue);
+    public void addAuthTokenCookie(HttpServletResponse response, String userId) {
+        // 创建AuthToken对象
+        AuthToken token = new AuthToken(userId, System.currentTimeMillis());
+        // 将AuthToken对象转换为字符串
+        String plainText = token.toString();
+        // 对转换后的字符串进行加密
+        String cipherText = AES.encrypt(plainText, cookieSettings.getSecretKey());
+        // 创建cookie
+        Cookie cookie = cookieUtils.createCookie(cookieSettings.getAuthTokenName(), cipherText);
+        // 将cookie添加到response对象中返回给客户端
         response.addCookie(cookie);
     }
 
 
     /**
-     * 验证会话是否存在以及是否有效
+     * 验证会话是否存在以及是否过期
      * 用于每次访问API时
-     * @param request
-     * @return
      */
     public static boolean validate(HttpServletRequest request) {
         Cookie cookie = cookieUtils.getCookie(request, cookieSettings.getAuthTokenName());
         if (cookie == null) {
-            throw new UnauthorizedException("登陆认证失败!");
+            throw new UnauthorizedException("尚未登录!");
         }
-        String cookieValue = cookie.getValue();
-        // 对cookieValue进行解密
-        String plainText = "";
-        AuthToken token = toAuthToken(cookieValue);
-        boolean isSessionEffective = token.getTimestamp() + cookieSettings.getTimeout() < System.currentTimeMillis();
-        if (isSessionEffective) {
-            // 刷新会话
+        // 对cookie value进行解密
+        String plainText = AES.decrypt(cookie.getValue(), cookieSettings.getSecretKey());
+        // 将解密后的字符串转换为AuthToken对象
+        AuthToken token = AuthToken.parse(plainText);
+        // 判断token是否过期
+        boolean isTokenEffective = token.getTimestamp() + cookieSettings.getTimeout() < System.currentTimeMillis();
+        if (isTokenEffective) {
+            // 刷新token
             return true;
         } else {
             throw new UnauthorizedException("会话已过期!");
@@ -67,6 +64,7 @@ public class AuthUtils {
     /**
      * 刷新token
      * 用于正常访问API之后
+     * 为了避免频繁刷新token......
      */
     public static void refreshToken(AuthToken token) {
         token.setTimestamp(System.currentTimeMillis());
@@ -74,26 +72,6 @@ public class AuthUtils {
         String cipherText = "";
         // 覆盖已有的token
 
-    }
-
-
-    // 加密
-    private static String encrypt(AuthToken token) {
-        // 先将AuthToken对象转换为字符串
-        String original = token.toString();
-        // 再对转换后的字符串进行加密
-        String password = AES.encrypt(original, "");
-        return password;
-    }
-
-
-    // 解密为对象
-    private static AuthToken toAuthToken(String password) {
-        // 先对password进行解密
-        String original = AES.decrypt(password, "");
-        // 再转换为AuthToken对象
-        AuthToken token = null;
-        return token;
     }
 
 }

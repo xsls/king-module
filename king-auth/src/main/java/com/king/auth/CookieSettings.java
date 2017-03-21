@@ -11,12 +11,11 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "king.cookie")
 public class CookieSettings {
 
-    //
     private String authTokenName;
     private Integer timeout;
     private String domain;
-    // 对cookie加密的盐
-    private String salt;
+    // 对cookie进行AES加解密的密钥
+    private String secretKey;
 
 
     public Integer getTimeout() {
@@ -43,12 +42,12 @@ public class CookieSettings {
         this.authTokenName = authTokenName;
     }
 
-    public String getSalt() {
-        return salt;
+    public String getSecretKey() {
+        return secretKey;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 
 }

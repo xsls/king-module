@@ -13,6 +13,14 @@ public class AuthToken {
     private Long timestamp;
 
 
+    public AuthToken(String userId, Long timestamp) {
+        this.userId = userId;
+        this.timestamp = timestamp;
+    }
+
+
+    // 是否有必要只保留get方法
+
     public String getUserId() {
         return userId;
     }
@@ -33,6 +41,20 @@ public class AuthToken {
     @Override
     public String toString() {
         return userId + "," + timestamp;
+    }
+
+
+    /**
+     * 将token字符串转换为AuthToken对象
+     */
+    public static AuthToken parse(String tokenStr) {
+        String[] str = tokenStr.split(",");
+        if (str.length != 2) {
+            throw new UnauthorizedException("token解析错误");
+        }
+        String userId = str[0];
+        Long timestamp = Long.parseLong(str[1]);
+        return new AuthToken(userId, timestamp);
     }
 
 }

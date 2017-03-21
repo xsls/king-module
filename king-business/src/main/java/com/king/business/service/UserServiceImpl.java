@@ -38,11 +38,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserLoginResponse login(UserLoginRequest request) {
         User user = userDbService.findByUsername(request.getUsername());
-        if(user == null) {
+        if (user == null) {
             System.out.println("用户不存在");
             return null;
         }
-        if(!request.getPassword().equalsIgnoreCase(user.getPassword())) {
+        if (!request.getPassword().equalsIgnoreCase(user.getPassword())) {
             System.out.println("密码错误");
             return null;
         }
