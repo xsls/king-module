@@ -14,6 +14,7 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- 由于对jpa和mysql驱动的依赖只存在于db层，其它模块都用不着，所以添加在此处，而不是添加到父依赖中 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

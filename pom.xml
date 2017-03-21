@@ -27,6 +27,14 @@
         <project.version>1.0-SNAPSHOT</project.version>
     </properties>
 
+    <dependencies>
+        <!-- 此依赖项本想添加在king-web模块中，可是其它模块也依赖它，所以提取出来放在父依赖中 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
