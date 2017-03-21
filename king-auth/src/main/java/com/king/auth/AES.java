@@ -28,20 +28,24 @@ public class AES {
      * @param plainText 原文
      * @param secretKey 密钥
      */
-    public static String encode(String plainText, String secretKey) throws Exception {
-        // 根据secretKey生成加解密密钥
-        SecretKeySpec key = generateSecretKey(secretKey);
+    public static String encrypt(String plainText, String secretKey) {
+        try {
+            // 根据secretKey生成加解密密钥
+            SecretKeySpec key = generateSecretKey(secretKey);
 
-        // 根据指定算法AES生成密码器
-        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
-        // 初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
-        cipher.init(Cipher.ENCRYPT_MODE, key, generateIv());
+            // 根据指定算法AES生成密码器
+            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+            // 初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
+            cipher.init(Cipher.ENCRYPT_MODE, key, generateIv());
 
-        // 对原文进行加密
-        byte[] b = cipher.doFinal(plainText.getBytes(CHARSET));
-        // 对加密结果进行Base64编码
-        byte[] b64 = Base64.getEncoder().encode(b);
-        return new String(b64, CHARSET);
+            // 对原文进行加密
+            byte[] b = cipher.doFinal(plainText.getBytes(CHARSET));
+            // 对加密结果进行Base64编码
+            byte[] b64 = Base64.getEncoder().encode(b);
+            return new String(b64, CHARSET);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
 
@@ -50,18 +54,22 @@ public class AES {
      * @param cipherText 密文
      * @param secretKey 密钥
      */
-    public static String decode(String cipherText, String secretKey) throws Exception {
-        // 根据secretKey生成加解密密钥
-        SecretKeySpec key = generateSecretKey(secretKey);
+    public static String decrypt(String cipherText, String secretKey) {
+        try {
+            // 根据secretKey生成加解密密钥
+            SecretKeySpec key = generateSecretKey(secretKey);
 
-        // 根据指定算法AES生成密码器
-        Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
-        // 初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
-        cipher.init(Cipher.DECRYPT_MODE, key, generateIv());
+            // 根据指定算法AES生成密码器
+            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+            // 初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
+            cipher.init(Cipher.DECRYPT_MODE, key, generateIv());
 
-        byte[] b = Base64.getDecoder().decode(cipherText.getBytes(CHARSET));
-        byte[] bb = cipher.doFinal(b);
-        return new String(bb, CHARSET);
+            byte[] b = Base64.getDecoder().decode(cipherText.getBytes(CHARSET));
+            byte[] bb = cipher.doFinal(b);
+            return new String(bb, CHARSET);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
 

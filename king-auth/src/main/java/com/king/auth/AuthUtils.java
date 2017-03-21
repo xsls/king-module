@@ -81,7 +81,7 @@ public class AuthUtils {
         // 先将AuthToken对象转换为字符串
         String original = token.toString();
         // 再对转换后的字符串进行加密
-        String password = AES.encrypt(original);
+        String password = AES.encrypt(original, "");
         return password;
     }
 
@@ -89,7 +89,7 @@ public class AuthUtils {
     // 解密为对象
     private static AuthToken toAuthToken(String password) {
         // 先对password进行解密
-        String original = AES.decrypt(password);
+        String original = AES.decrypt(password, "");
         // 再转换为AuthToken对象
         AuthToken token = null;
         return token;
