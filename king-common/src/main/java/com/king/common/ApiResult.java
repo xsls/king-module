@@ -21,7 +21,7 @@ public class ApiResult<T> {
 
 
     public ApiResult of(Integer errorCode, String errorMessage, T data) {
-        return new ApiResult<>(errorCode, errorMessage, data);
+        return new ApiResult(errorCode, errorMessage, data);
     }
 
 
