@@ -6,5 +6,15 @@ package com.king.common.exception;
  */
 public class KingBaseException extends RuntimeException {
 
+    private Integer errorCode;
+
+    private String errorMessage;
+
+
+    public KingBaseException(Integer errorCode, String errorMessage) {
+        super();
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
 
 }
